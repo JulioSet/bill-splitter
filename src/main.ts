@@ -13,16 +13,12 @@ import Aura from '@primeuix/themes/aura'
 // Prime Icons
 import 'primeicons/primeicons.css'
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-// PrimeVue
-app.use(PrimeVue, {
-  theme: {
-    preset: Aura,
-  },
-})
-
-app.mount('#app')
+createApp(App)
+  .use(createPinia())
+  .use(router)
+  .use(PrimeVue, {
+    theme: {
+      preset: Aura,
+    },
+  })
+  .mount('#app')

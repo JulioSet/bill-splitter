@@ -1,10 +1,9 @@
 <template>
-  <Button label="Hello PrimeVue" />
-  <RouterView />
+  <AppLayout />
 </template>
 
 <script setup lang="ts">
-import { Button } from 'primevue'
+import AppLayout from './app/AppLayout.vue'
 </script>
 
 <style scoped></style>
