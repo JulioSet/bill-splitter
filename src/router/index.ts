@@ -1,4 +1,6 @@
 import HomePage from '@/pages/HomePage.vue'
+import ReviewReceiptPage from '@/pages/ReviewReceiptPage.vue'
+import SplitBillPage from '@/pages/SplitBillPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,6 +10,16 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomePage,
+    },
+    {
+      path: '/review',
+      name: 'review',
+      component: ReviewReceiptPage,
+    },
+    {
+      path: '/split',
+      name: 'split',
+      component: SplitBillPage,
     },
   ],
 })
