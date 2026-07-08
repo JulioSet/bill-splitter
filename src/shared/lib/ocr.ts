@@ -28,5 +28,7 @@ export async function recognizeReceipt(image: File, onProgress?: (progress: numb
     // await worker.terminate()
 
     return result.data.text
+  } else {
+    return ''
   }
 }
