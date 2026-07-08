@@ -21,6 +21,7 @@ function normalizeName(value: string): string {
     .replace(/^I(?=[A-Za-z])/i, '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/\s+/g, ' ')
+    .replace(/^[xX]\s*/, '')
     .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase())
     .trim()
