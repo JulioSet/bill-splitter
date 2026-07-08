@@ -135,11 +135,11 @@ const newPerson = ref('')
 
 const items = computed(() => receiptStore.receipt?.items ?? [])
 const serviceCharge = computed({
-  get: () => receiptStore.receipt.serviceCharge ?? 5,
+  get: () => receiptStore.receipt.serviceCharge,
   set: (value) => receiptStore.updateServiceCharge(value ?? 0),
 })
 const pb1 = computed({
-  get: () => receiptStore.receipt.pb1 ?? 10,
+  get: () => receiptStore.receipt.pb1,
   set: (value) => receiptStore.updatePb1(value ?? 0),
 })
 
@@ -161,5 +161,7 @@ onMounted(() => {
   if (!receiptStore.receipt || receiptStore.receipt.items.length === 0) {
     router.push('/')
   }
+  receiptStore.updateServiceCharge(5)
+  receiptStore.updatePb1(10)
 })
 </script>
