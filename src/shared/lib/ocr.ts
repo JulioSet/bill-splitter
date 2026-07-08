@@ -6,7 +6,7 @@ export async function recognizeReceipt(image: File, onProgress?: (progress: numb
 
   let worker
   if (typeof Worker !== 'undefined') {
-    worker = await createWorker('eng', undefined, {
+    worker = await createWorker('ind', undefined, {
       logger(message) {
         if (message.status === 'recognizing text' && message.progress) {
           onProgress?.(Math.round(message.progress * 100))
