@@ -55,15 +55,15 @@ export function parseReceipt(text: string): Receipt {
         continue
       }
 
-      if (lowerLine.startsWith('service') || lowerLine.startsWith('serv')) {
-        serviceCharge = value
-        continue
-      }
+      // if (lowerLine.startsWith('service') || lowerLine.startsWith('serv')) {
+      //   serviceCharge = value
+      //   continue
+      // }
 
-      if (lowerLine.startsWith('pb1') || lowerLine.startsWith('pbi')) {
-        pb1 = value
-        continue
-      }
+      // if (lowerLine.startsWith('pb1') || lowerLine.startsWith('pbi')) {
+      //   pb1 = value
+      //   continue
+      // }
 
       if (/^total\s/i.test(lowerLine)) {
         total = value

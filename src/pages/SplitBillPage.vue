@@ -65,28 +65,12 @@
         <div class="grid gap-4 md:grid-cols-2">
           <div>
             <label class="mb-2 block text-sm font-medium"> Service Charge </label>
-
-            <InputNumber
-              :model-value="receiptStore.receipt?.serviceCharge ?? 5"
-              suffix="%"
-              :min="0"
-              :max="100"
-              fluid
-              @update:model-value="receiptStore.updateServiceCharge(Number($event ?? 0))"
-            />
+            <InputNumber v-model="serviceCharge" suffix="%" :min="0" :max="100" fluid />
           </div>
 
           <div>
             <label class="mb-2 block text-sm font-medium"> PB1 </label>
-
-            <InputNumber
-              :model-value="receiptStore.receipt?.pb1 ?? 10"
-              suffix="%"
-              :min="0"
-              :max="100"
-              fluid
-              @update:model-value="receiptStore.updatePb1(Number($event ?? 0))"
-            />
+            <InputNumber v-model="pb1" suffix="%" :min="0" :max="100" fluid />
           </div>
         </div>
       </template>
@@ -150,6 +134,14 @@ const { summary } = useSplit()
 const newPerson = ref('')
 
 const items = computed(() => receiptStore.receipt?.items ?? [])
+const serviceCharge = computed({
+  get: () => receiptStore.receipt.serviceCharge ?? 5,
+  set: (value) => receiptStore.updateServiceCharge(value ?? 0),
+})
+const pb1 = computed({
+  get: () => receiptStore.receipt.pb1 ?? 10,
+  set: (value) => receiptStore.updatePb1(value ?? 0),
+})
 
 function addPerson() {
   if (!newPerson.value.trim()) {

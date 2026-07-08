@@ -6,8 +6,59 @@
       <p class="text-slate-500">Check the detected items before splitting.</p>
     </section>
 
-    <div class="rounded-2xl bg-white border border-slate-200 p-5 space-y-4">
-      <div v-for="item in items" :key="item.id" class="flex gap-3 items-center">
+    <!-- Mobile -->
+    <div class="space-y-4 md:hidden">
+      <div
+        v-for="item in items"
+        :key="item.id"
+        class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1">
+            <label class="mb-1 block text-sm font-medium text-slate-600"> Item </label>
+
+            <input
+              class="w-full rounded-lg border border-slate-300 px-3 py-2"
+              :value="item.name"
+              @input="updateName(item.id, $event)"
+            />
+          </div>
+
+          <button
+            class="mt-7 rounded-lg p-2 text-red-500 hover:bg-red-50"
+            @click="receiptStore.removeItem(item.id)"
+          >
+            <i class="pi pi-trash text-lg" />
+          </button>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1 block text-sm font-medium text-slate-600"> Qty </label>
+
+            <input
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 text-right"
+              :value="item.quantity"
+              @input="updateQuantity(item.id, $event)"
+            />
+          </div>
+
+          <div>
+            <label class="mb-1 block text-sm font-medium text-slate-600"> Price </label>
+
+            <input
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 text-right"
+              :value="formatPrice(item.price)"
+              @input="updatePrice(item.id, $event)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="hidden space-y-4 rounded-2xl border border-slate-200 bg-white p-5 md:block">
+      <div v-for="item in items" :key="item.id" class="flex items-center gap-3">
         <input
           class="flex-1 rounded-lg border border-slate-300 px-3 py-2"
           :value="item.name"
@@ -15,24 +66,40 @@
         />
 
         <input
-          class="w-32 rounded-lg border border-slate-300 px-3 py-2 text-right"
+          class="w-24 rounded-lg border border-slate-300 px-3 py-2 text-right"
           :value="item.quantity"
           @input="updateQuantity(item.id, $event)"
         />
 
         <input
-          class="w-32 rounded-lg border border-slate-300 px-3 py-2 text-right"
+          class="w-36 rounded-lg border border-slate-300 px-3 py-2 text-right"
           :value="formatPrice(item.price)"
           @input="updatePrice(item.id, $event)"
         />
 
-        <button class="text-red-500" @click="receiptStore.removeItem(item.id)">
+        <button
+          class="rounded-lg p-2 text-red-500 hover:bg-red-50"
+          @click="receiptStore.removeItem(item.id)"
+        >
           <i class="pi pi-trash" />
         </button>
       </div>
     </div>
 
-    <Button label="Continue" class="w-full" @click="continueSplit" />
+    <Button
+      label="Add Item"
+      icon="pi pi-plus"
+      severity="contrast"
+      class="w-full mb-12"
+      @click="receiptStore.addItem"
+    />
+
+    <!-- Sticky footer -->
+    <div class="fixed inset-x-0 bottom-0 border-t border-slate-200 bg-white p-4">
+      <div class="mx-auto max-w-3xl">
+        <Button label="Continue" class="w-full" @click="continueSplit" />
+      </div>
+    </div>
   </div>
 </template>
 

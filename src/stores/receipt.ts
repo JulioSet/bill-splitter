@@ -26,6 +26,17 @@ export const useReceiptStore = defineStore('receipt', () => {
     Object.assign(item, data)
   }
 
+  function addItem() {
+    receipt.value.items.push({
+      id: crypto.randomUUID(),
+      name: '',
+      quantity: 1,
+      price: 0,
+      unitPrice: 0,
+      assignedTo: [],
+    })
+  }
+
   function removeItem(id: string) {
     if (!receipt.value) {
       return
@@ -66,9 +77,9 @@ export const useReceiptStore = defineStore('receipt', () => {
 
   return {
     receipt,
-
     setReceipt,
 
+    addItem,
     updateItem,
     removeItem,
     togglePerson,

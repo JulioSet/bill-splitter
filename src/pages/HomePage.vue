@@ -6,13 +6,12 @@
       <p class="mt-2 text-slate-500">Upload your receipt and let us calculate everyone's share.</p>
     </section>
 
-    <ReceiptUploadCard @upload="handleUpload" @scan="startScan" />
+    <ReceiptUploadCard v-if="!loading" @upload="handleUpload" @scan="startScan" />
 
-    <div v-if="loading" class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm">
+    <div v-else="loading" class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm">
       <div class="flex items-center gap-3">
         <i class="pi pi-spin pi-spinner text-emerald-600" />
-
-        <span> Reading receipt... {{ progress }}% </span>
+        <span class="text-emerald-600"> Reading receipt... {{ progress }}% </span>
       </div>
 
       <div class="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
@@ -25,7 +24,7 @@
       </div>
     </div>
 
-    <div v-if="receipt" class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm text-slate-900">
+    <!-- <div v-if="receipt" class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm text-slate-900">
       <h3 class="font-semibold">Items Found</h3>
 
       <div class="mt-4 space-y-3">
@@ -67,7 +66,7 @@
         <span>Total</span>
         <span>{{ receipt.total.toLocaleString('en-US') }}</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
