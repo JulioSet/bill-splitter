@@ -1,9 +1,6 @@
 import { createWorker, PSM } from 'tesseract.js'
-import { preprocessImage } from './imagePreprocessed'
 
 export async function recognizeReceipt(image: File, onProgress?: (progress: number) => void) {
-  // const processed = await preprocessImage(image)
-
   let worker
   if (typeof Worker !== 'undefined') {
     worker = await createWorker('ind', undefined, {
