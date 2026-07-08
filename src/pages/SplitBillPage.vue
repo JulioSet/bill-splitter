@@ -4,13 +4,18 @@
 
     <!-- People -->
 
-    <div class="rounded-2xl bg-white border p-5">
+    <div class="rounded-2xl bg-white border border-slate-200 p-5">
       <h2 class="font-semibold">People</h2>
 
-      <div class="mt-3 flex gap-2">
-        <input v-model="newPerson" class="rounded-lg border px-3 py-2" placeholder="Name" />
-
-        <button class="rounded-lg bg-emerald-600 px-4 text-white" @click="addPerson">Add</button>
+      <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+        <InputText v-model="newPerson" placeholder="Name" class="w-full" @keyup.enter="addPerson" />
+        <Button
+          label="Add"
+          icon="pi pi-plus"
+          class="w-full sm:w-auto"
+          size="small"
+          @click="addPerson"
+        />
       </div>
 
       <div class="mt-4 flex gap-2 flex-wrap">
@@ -27,7 +32,11 @@
     <!-- Items -->
 
     <div class="space-y-4">
-      <div v-for="item in items" :key="item.id" class="rounded-2xl bg-white border p-5">
+      <div
+        v-for="item in items"
+        :key="item.id"
+        class="rounded-2xl bg-white border border-slate-200 p-5"
+      >
         <div>
           <span class="font-medium">
             {{ item.name }}
@@ -76,7 +85,7 @@
       </template>
     </Card>
 
-    <section class="rounded-2xl bg-white border p-5">
+    <section class="rounded-2xl bg-white border border-slate-200 p-5">
       <h2 class="font-semibold">Summary</h2>
 
       <div class="mt-4 space-y-3">
@@ -123,7 +132,7 @@ import { computed, onMounted, ref } from 'vue'
 import { usePeopleStore } from '@/stores/people'
 import { useReceiptStore } from '@/stores/receipt'
 import { useSplit } from '@/shared/composables/useSplit'
-import { Card, InputNumber } from 'primevue'
+import { Card, InputNumber, InputText, Button } from 'primevue'
 import router from '@/router'
 
 const peopleStore = usePeopleStore()
@@ -165,3 +174,11 @@ onMounted(() => {
   receiptStore.updatePb1(10)
 })
 </script>
+
+<style scoped>
+:deep(.p-inputtext) {
+  background-color: white;
+  color: black;
+  border-color: gainsboro;
+}
+</style>

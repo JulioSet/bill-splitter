@@ -9,7 +9,9 @@
 
       <h2 class="mt-5 text-lg font-semibold text-slate-900">Upload Receipt</h2>
 
-      <p class="mt-2 text-sm text-slate-500">Click or drag your receipt image here</p>
+      <p class="mt-2 max-w-xs text-center text-sm text-slate-500">
+        Click or drag your receipt image here
+      </p>
 
       <input type="file" accept="image/*" class="hidden" @change="onFileChange" />
     </label>
