@@ -16,10 +16,8 @@
 
       <div class="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
         <div
-          class="h-full bg-emerald-600 transition-all"
-          :style="{
-            width: `${progress}vw`,
-          }"
+          class="h-full rounded-full bg-emerald-600 transition-all"
+          :style="{ width: `${progress}%` }"
         />
       </div>
     </div>
