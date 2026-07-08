@@ -18,7 +18,7 @@
         <div
           class="h-full bg-emerald-600 transition-all"
           :style="{
-            width: `${progress}%`,
+            width: `${progress}vw`,
           }"
         />
       </div>
