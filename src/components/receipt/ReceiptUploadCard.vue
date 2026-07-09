@@ -3,7 +3,16 @@
     <!-- Empty State -->
     <label
       v-if="!previewUrl"
-      class="flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-300 px-6 py-16 transition hover:border-emerald-500 hover:bg-emerald-50"
+      :class="[
+        'flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed px-6 py-16 transition',
+        isDragging
+          ? 'border-emerald-500 bg-emerald-50'
+          : 'border-slate-300 hover:border-emerald-500 hover:bg-emerald-50',
+      ]"
+      @dragenter.prevent="isDragging = true"
+      @dragover.prevent
+      @dragleave.prevent="isDragging = false"
+      @drop.prevent="onDrop"
     >
       <i class="pi pi-camera text-4xl text-emerald-600" />
 
@@ -45,9 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const previewUrl = ref<string>()
+const isDragging = ref(false)
 
 const emit = defineEmits<{
   upload: [file: File]
@@ -66,4 +76,40 @@ function onFileChange(event: Event) {
 
   emit('upload', file)
 }
+
+const onDrop = (event: DragEvent) => {
+  const file = event.dataTransfer?.files?.[0]
+
+  if (!file || !file.type.startsWith('image/')) return
+
+  previewUrl.value = URL.createObjectURL(file)
+
+  emit('upload', file)
+}
+
+const onPaste = (event: ClipboardEvent) => {
+  const items = event.clipboardData?.items
+  if (!items) return
+
+  for (const item of items) {
+    if (!item.type.startsWith('image/')) continue
+
+    const file = item.getAsFile()
+    if (file) {
+      previewUrl.value = URL.createObjectURL(file)
+
+      emit('upload', file)
+    }
+
+    break
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('paste', onPaste)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('paste', onPaste)
+})
 </script>
