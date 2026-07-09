@@ -1,6 +1,6 @@
-# Split It Right
+# Split It Right (Rupiah Only!)
 
-A modern, responsive web app to effortlessly split bills and track expenses with friends. Stop the mental math and settle up faster!
+A modern, responsive web app to effortlessly split bills and track expenses with friends. Stop the mental math and settle up faster! 
 
 ## Features
 
