@@ -86,7 +86,18 @@
     </Card>
 
     <section class="rounded-2xl bg-white border border-slate-200 p-5">
-      <h2 class="font-semibold">Summary</h2>
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold">Summary</h2>
+        <Button
+          :label="copied ? 'Copied to Clipboard' : 'Copy'"
+          :icon="copied ? 'pi pi-check' : 'pi pi-copy'"
+          class="w-full sm:w-auto"
+          size="small"
+          :outlined="copied"
+          :severity="copied ? 'success' : 'secondary'"
+          @click="copySummary"
+        />
+      </div>
 
       <div class="mt-4 space-y-3">
         <div
@@ -129,16 +140,19 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
-import { usePeopleStore } from '@/stores/people'
+import { usePeopleStore, type Person } from '@/stores/people'
 import { useReceiptStore } from '@/stores/receipt'
 import { useSplit } from '@/shared/composables/useSplit'
 import { Card, InputNumber, InputText, Button } from 'primevue'
 import router from '@/router'
+import type { Receipt } from '@/entities/receipt/model'
 
 const peopleStore = usePeopleStore()
 const receiptStore = useReceiptStore()
 
 const { summary } = useSplit()
+
+const copied = ref(false)
 
 const newPerson = ref('')
 
@@ -162,8 +176,79 @@ function addPerson() {
   newPerson.value = ''
 }
 
+function buildReceiptText(receipt: Receipt, people: Person[]) {
+  const lines: string[] = []
+
+  lines.push('🧾 Receipt')
+  lines.push('')
+
+  receipt.items.forEach((item) => {
+    lines.push(`${item.name.padEnd(24)} ${formatCurrency(item.price)}`)
+  })
+
+  lines.push('')
+  lines.push(`Subtotal : ${formatCurrency(receipt.subtotal ?? 0)}`)
+  lines.push(`Service  : ${formatCurrency(receipt.serviceChargeAmount ?? 0)}`)
+  lines.push(`PB1      : ${formatCurrency(receipt.pb1Amount ?? 0)}`)
+  lines.push(`Total    : ${formatCurrency(receipt.total ?? 0)}`)
+  lines.push('')
+  lines.push('👥 Split')
+  lines.push('')
+
+  summary.value.forEach((person) => {
+    const items = receipt.items.filter((item) => item.assignedTo.includes(person.person.id))
+
+    const subtotal = items.reduce((sum, item) => sum + item.price, 0)
+
+    const service = person.serviceCharge
+    const pb1 = person.pb1
+    const total = subtotal + service + pb1
+
+    lines.push(person.person.name)
+
+    items.forEach((item) => {
+      lines.push(`- ${item.name} (${formatCurrency(item.price)})`)
+    })
+
+    lines.push(`Subtotal : ${formatCurrency(subtotal)}`)
+
+    if ((receipt.serviceCharge ?? 0) > 0) {
+      lines.push(`Service  : ${formatCurrency(service)}`)
+    }
+
+    if ((receipt.pb1 ?? 0) > 0) {
+      lines.push(`PB1      : ${formatCurrency(pb1)}`)
+    }
+
+    lines.push(`Total    : ${formatCurrency(total)}`)
+    lines.push('')
+  })
+
+  return lines.join('\n')
+}
+
 function toggle(itemId: string, personId: string) {
   receiptStore.togglePerson(itemId, personId)
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+const copySummary = async () => {
+  const text = buildReceiptText(receiptStore.receipt!, peopleStore.people)
+
+  await navigator.clipboard.writeText(text)
+
+  copied.value = true
+
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
 }
 
 onMounted(() => {

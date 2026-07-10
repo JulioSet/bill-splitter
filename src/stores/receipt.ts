@@ -9,6 +9,8 @@ export const useReceiptStore = defineStore('receipt', () => {
     subtotal: 0,
     serviceCharge: 5,
     pb1: 10,
+    serviceChargeAmount: 0,
+    pb1Amount: 0,
     total: 0,
   })
 

@@ -36,8 +36,8 @@ export function parseReceipt(text: string): Receipt {
   const items: ReceiptItem[] = []
 
   let subtotal: number | undefined
-  let serviceCharge: number | undefined
-  let pb1: number | undefined
+  let serviceChargeAmount: number | undefined
+  let pb1Amount: number | undefined
   let total: number | undefined
 
   for (const line of lines) {
@@ -56,15 +56,15 @@ export function parseReceipt(text: string): Receipt {
         continue
       }
 
-      // if (lowerLine.startsWith('service') || lowerLine.startsWith('serv')) {
-      //   serviceCharge = value
-      //   continue
-      // }
+      if (lowerLine.startsWith('service') || lowerLine.startsWith('serv')) {
+        serviceChargeAmount = value
+        continue
+      }
 
-      // if (lowerLine.startsWith('pb1') || lowerLine.startsWith('pbi')) {
-      //   pb1 = value
-      //   continue
-      // }
+      if (lowerLine.startsWith('pb1') || lowerLine.startsWith('pbi')) {
+        pb1Amount = value
+        continue
+      }
 
       if (/^total\s/i.test(lowerLine)) {
         total = value
@@ -118,8 +118,8 @@ export function parseReceipt(text: string): Receipt {
   return {
     items,
     subtotal,
-    serviceCharge,
-    pb1,
+    serviceChargeAmount,
+    pb1Amount,
     total,
   }
 }
