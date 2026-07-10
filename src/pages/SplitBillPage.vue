@@ -111,24 +111,24 @@
             </span>
 
             <span class="font-bold">
-              {{ person.total.toLocaleString('en-US') }}
+              {{ formatCurrency(person.total) }}
             </span>
           </div>
 
           <div class="mt-3 text-sm text-slate-500">
             <div class="flex justify-between">
               <span>Subtotal</span>
-              <span>{{ person.subtotal.toLocaleString('en-US') }}</span>
+              <span>{{ formatCurrency(person.subtotal) }}</span>
             </div>
 
             <div class="flex justify-between">
               <span>Service Charge</span>
-              <span>{{ person.serviceCharge.toLocaleString('en-US') }}</span>
+              <span>{{ formatCurrency(person.serviceCharge) }}</span>
             </div>
 
             <div class="flex justify-between">
               <span>PB1</span>
-              <span>{{ person.pb1.toLocaleString('en-US') }}</span>
+              <span>{{ formatCurrency(person.pb1) }}</span>
             </div>
           </div>
         </div>
