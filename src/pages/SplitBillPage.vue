@@ -179,7 +179,7 @@ function addPerson() {
 function buildReceiptText(receipt: Receipt, people: Person[]) {
   const lines: string[] = []
 
-  lines.push('🧾 Receipt')
+  lines.push('*RECEIPT*')
   lines.push('')
 
   receipt.items.forEach((item) => {
@@ -192,7 +192,7 @@ function buildReceiptText(receipt: Receipt, people: Person[]) {
   lines.push(`PB1      : ${formatCurrency(receipt.pb1Amount ?? 0)}`)
   lines.push(`Total    : ${formatCurrency(receipt.total ?? 0)}`)
   lines.push('')
-  lines.push('👥 Split')
+  lines.push('*SPLIT SUMMARY*')
   lines.push('')
 
   summary.value.forEach((person) => {
