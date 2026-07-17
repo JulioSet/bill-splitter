@@ -7,7 +7,7 @@
         <span class="font-semibold text-slate-900"> Bill Splitter </span>
       </div>
 
-      <button class="text-sm text-slate-600 hover:text-slate-900">History</button>
+      <router-link to="/history" class="text-sm text-slate-600 hover:text-slate-900">History</router-link>
     </div>
   </header>
 </template>

@@ -88,15 +88,24 @@
     <section class="rounded-2xl bg-white border border-slate-200 p-5">
       <div class="flex items-center justify-between">
         <h2 class="font-semibold">Summary</h2>
-        <Button
-          :label="copied ? 'Copied to Clipboard' : 'Copy'"
-          :icon="copied ? 'pi pi-check' : 'pi pi-copy'"
-          class="w-full sm:w-auto"
-          size="small"
-          :outlined="copied"
-          :severity="copied ? 'success' : 'secondary'"
-          @click="copySummary"
-        />
+        <div class="flex gap-2">
+          <Button
+            label="Save to History"
+            icon="pi pi-save"
+            size="small"
+            severity="secondary"
+            outlined
+            @click="saveToHistory"
+          />
+          <Button
+            :label="copied ? 'Copied to Clipboard' : 'Copy'"
+            :icon="copied ? 'pi pi-check' : 'pi pi-copy'"
+            size="small"
+            :outlined="copied"
+            :severity="copied ? 'success' : 'secondary'"
+            @click="copySummary"
+          />
+        </div>
       </div>
 
       <div class="mt-4 space-y-3">
@@ -140,6 +149,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
+import { useHistoryStore } from '@/stores/history'
 import { usePeopleStore, type Person } from '@/stores/people'
 import { useReceiptStore } from '@/stores/receipt'
 import { useSplit } from '@/shared/composables/useSplit'
@@ -149,6 +159,7 @@ import type { Receipt } from '@/entities/receipt/model'
 
 const peopleStore = usePeopleStore()
 const receiptStore = useReceiptStore()
+const historyStore = useHistoryStore()
 
 const { summary } = useSplit()
 
@@ -249,6 +260,14 @@ const copySummary = async () => {
   setTimeout(() => {
     copied.value = false
   }, 2000)
+}
+
+function saveToHistory() {
+  const items = receiptStore.receipt.items
+  const label = items.length > 0
+    ? items.slice(0, 3).map((i) => i.name).join(', ') + (items.length > 3 ? ' …' : '')
+    : 'Empty receipt'
+  historyStore.saveEntry(label, receiptStore.receipt, peopleStore.people)
 }
 
 onMounted(() => {
