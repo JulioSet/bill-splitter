@@ -6,6 +6,13 @@
       <p class="text-slate-500">Check the detected items before splitting.</p>
     </section>
 
+    <div
+      v-if="receiptStore.receipt.warnings?.length"
+      class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
+    >
+      <div v-for="(w, i) in receiptStore.receipt.warnings" :key="i">{{ w }}</div>
+    </div>
+
     <!-- Mobile -->
     <div class="space-y-4 md:hidden">
       <div

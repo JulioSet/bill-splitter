@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, toRaw } from 'vue'
+import { ref } from 'vue'
 
 import type { Receipt } from '@/entities/receipt/model'
 import type { Person } from '@/stores/people'

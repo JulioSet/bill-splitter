@@ -9,6 +9,32 @@ const ignoredWords = [
   'totalitem',
   'totalqty',
   'bnivisa',
+  'change',
+  'kembali',
+  'discount',
+  'diskon',
+  'member',
+  'card',
+  'debit',
+  'credit',
+  'kredit',
+  'debit',
+  'nfc',
+  'qris',
+  'thank',
+  'terima',
+  'kasih',
+  'item',
+  'qty',
+  'price',
+  'harga',
+  'jumlah',
+  'total',
+  'subtotal',
+  'tunai',
+  'kembalian',
+  'pajak',
+  'dibayar',
 ]
 
 function parsePrice(value: string): number {
@@ -33,6 +59,8 @@ export function parseReceipt(text: string): Receipt {
     .map((line) => line.trim())
     .filter(Boolean)
 
+  const warnings: string[] = []
+
   const items: ReceiptItem[] = []
 
   let subtotal: number | undefined
@@ -45,9 +73,6 @@ export function parseReceipt(text: string): Receipt {
 
     const priceMatch = line.match(/([\d.,]+)$/)
 
-    /**
-     * Summary fields
-     */
     if (priceMatch?.[1]) {
       const value = parsePrice(priceMatch[1])
 
@@ -72,19 +97,10 @@ export function parseReceipt(text: string): Receipt {
       }
     }
 
-    /**
-     * Ignore footer/header
-     */
     if (ignoredWords.some((word) => lowerLine.startsWith(word))) {
       continue
     }
 
-    /**
-     * Item:
-     * 1BolaBolaSusu 79,000
-     * BolaBolaSusu 79,000
-     * 2 Bola Bola Susu 79,000
-     */
     const itemMatch = line.match(/^(?:(\d+)\s*)?(.+?)\s+(?:rp)?\s*([\d.,]+)$/i)
 
     if (!itemMatch) {
@@ -105,14 +121,39 @@ export function parseReceipt(text: string): Receipt {
       continue
     }
 
-    items.push({
-      id: crypto.randomUUID(),
-      name: normalizeName(rawName),
-      price: price,
-      unitPrice: price / qty,
-      quantity: qty,
-      assignedTo: [],
-    })
+    const name = normalizeName(rawName)
+
+    if (!name) {
+      continue
+    }
+
+    const existing = items.find((i) => i.name === name)
+
+    if (existing) {
+      existing.quantity += qty
+      existing.price += price
+      existing.unitPrice = existing.price / existing.quantity
+    } else {
+      items.push({
+        id: crypto.randomUUID(),
+        name,
+        price,
+        unitPrice: price / qty,
+        quantity: qty,
+        assignedTo: [],
+      })
+    }
+  }
+
+  if (subtotal !== undefined) {
+    const sumPrices = items.reduce((sum, item) => sum + item.price, 0)
+    const diff = Math.abs(sumPrices - subtotal)
+
+    if (diff > 0) {
+      warnings.push(
+        `Sum of items (${sumPrices.toLocaleString('en-US')}) differs from subtotal (${subtotal.toLocaleString('en-US')}) by ${diff.toLocaleString('en-US')}.`,
+      )
+    }
   }
 
   return {
@@ -121,5 +162,6 @@ export function parseReceipt(text: string): Receipt {
     serviceChargeAmount,
     pb1Amount,
     total,
+    warnings: warnings.length > 0 ? warnings : undefined,
   }
 }

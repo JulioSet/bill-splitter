@@ -197,11 +197,17 @@ function buildReceiptText(receipt: Receipt, people: Person[]) {
     lines.push(`${item.name.padEnd(24)} ${formatCurrency(item.price)}`)
   })
 
+  const computedSubtotal = receipt.items.reduce((sum, item) => sum + item.price, 0)
+  const computedService = (computedSubtotal * (receipt.serviceCharge ?? 0)) / 100
+  const computedTaxable = computedSubtotal + computedService
+  const computedPb1 = (computedTaxable * (receipt.pb1 ?? 0)) / 100
+  const computedTotal = computedTaxable + computedPb1
+
   lines.push('')
-  lines.push(`Subtotal : ${formatCurrency(receipt.subtotal ?? 0)}`)
-  lines.push(`Service  : ${formatCurrency(receipt.serviceChargeAmount ?? 0)}`)
-  lines.push(`PB1      : ${formatCurrency(receipt.pb1Amount ?? 0)}`)
-  lines.push(`Total    : ${formatCurrency(receipt.total ?? 0)}`)
+  lines.push(`Subtotal : ${formatCurrency(computedSubtotal)}`)
+  lines.push(`Service  : ${formatCurrency(computedService)}`)
+  lines.push(`PB1      : ${formatCurrency(computedPb1)}`)
+  lines.push(`Total    : ${formatCurrency(computedTotal)}`)
   lines.push('')
   lines.push('*SPLIT SUMMARY*')
   lines.push('')

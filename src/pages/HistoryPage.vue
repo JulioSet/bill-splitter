@@ -34,7 +34,7 @@
             <span class="text-xs text-slate-400">{{ formatDate(entry.timestamp) }}</span>
           </div>
           <div class="mt-1 text-sm text-slate-500">
-            {{ entry.receipt.items.length }} items &middot; {{ entry.people.length }} people
+            {{ entry.receipt.items.length }} items &middot; {{ entry.people.length }} people &middot; {{ formatCurrency(computeTotal(entry.receipt)) }}
           </div>
           <div class="mt-1 flex flex-wrap gap-1">
             <span
@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Receipt } from '@/entities/receipt/model'
 import { useHistoryStore, type HistoryEntry } from '@/stores/history'
 import { useReceiptStore } from '@/stores/receipt'
 import { usePeopleStore } from '@/stores/people'
@@ -85,6 +86,14 @@ function formatCurrency(value: number) {
     currency: 'IDR',
     maximumFractionDigits: 0,
   }).format(value)
+}
+
+function computeTotal(receipt: Receipt) {
+  const subtotal = receipt.items.reduce((sum, item) => sum + item.price, 0)
+  const service = (subtotal * (receipt.serviceCharge ?? 0)) / 100
+  const taxable = subtotal + service
+  const pb1 = (taxable * (receipt.pb1 ?? 0)) / 100
+  return taxable + pb1
 }
 
 function loadEntry(entry: HistoryEntry) {

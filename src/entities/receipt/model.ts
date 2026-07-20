@@ -6,6 +6,7 @@ export interface Receipt {
   serviceChargeAmount?: number
   pb1Amount?: number
   total?: number
+  warnings?: string[]
 }
 
 export interface ReceiptItem {
